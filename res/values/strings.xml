@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">How Drunk Am I?</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="button_send">Calculate</string>
+    <string name="weight">Weight</string>
+    <string name="wText">Your weight (in kg)</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="hours">Hours</string>
+    <string name="hText">Hours you\'re drinking</string>
+    <string name="glasses">Glasses</string>
+    <string name="gText">Amount</string>
+    <string name="button_recal">Recalculate</string>
+    <string name="warning">*This is only an estimate. Your real promille could differ from the result</string>
+    <string name="signal">*</string>
+    <string name="add_button">Add</string>
+    <string name="remove_button">Remove</string>
+    <string name="choose_beer">Choose your drink\'s</string>
+    
+    <string-array name="beers">
+        <item>Bier(25cl)</item>
+        <item>Bier(33cl)</item>
+        <item>Bier(50cl)</item>
+        <item>Speciaal Bier (33cl|6,5%)</item>
+        <item>Speciaal Bier (33cl|8%)</item>
+        <item>Speciaal Bier (33cl|10%)</item>
+        <item>Wijn (glas)</item>
+        <item>Wijn (fles)</item>
+        <item>Aperitief (5cl|15%)</item>
+        <item>Sterke drank (3,5cl|35%)</item>
+        <item>Sterke drank (3,5cl|40%)</item>
+        <item>Mixdrank (27,5cl|5,6%)</item>
+    </string-array>
+
+</resources>
