@@ -14,12 +14,16 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Color;
 import android.text.InputType;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 /**
  * Respresents the object of the app.
@@ -31,6 +35,8 @@ public class MainActivity extends Activity {
 	int ID = 0; 
 	ArrayList<EditText> hoeveelheden = new ArrayList<EditText>();
 	ArrayList<Spinner> biersoorten = new ArrayList<Spinner>();
+	private Animation fadeIn;
+	private Animation fadeOut;
 	@Override 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +49,11 @@ public class MainActivity extends Activity {
 	 */
 	public void setNewTextViewWithText(String string, int inRedZone){
 		setContentView(R.layout.promille_view);
+		fadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in);
+		fadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out);
+
+		RelativeLayout relProm = (RelativeLayout) findViewById(R.id.PromLay);
+		relProm.setAnimation(fadeIn);
 		final Button recal = (Button) findViewById(R.id.btnRecal);
 		final TextView tv = (TextView) findViewById(R.id.promille);
 		tv.setText(string);
@@ -63,6 +74,8 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				biersoorten.removeAll(biersoorten);
 				hoeveelheden.removeAll(hoeveelheden);
+				RelativeLayout rel = (RelativeLayout) findViewById(R.id.PromLay);
+				rel.setAnimation(fadeOut);
 				refresh();
 				
 			}
@@ -74,9 +87,13 @@ public class MainActivity extends Activity {
 	 */
 	public void refresh(){
 		setContentView(R.layout.activity_main);
-		
+		fadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in);
+		fadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out);
 		biersoorten.removeAll(biersoorten);
 		hoeveelheden.removeAll(hoeveelheden);
+
+		RelativeLayout rel = (RelativeLayout) findViewById(R.id.RelLayout);
+		rel.setAnimation(fadeIn);
 		
 		final Button buttonCal = (Button) findViewById(R.id.buttonCalculate);
 		final EditText weight = (EditText) findViewById(R.id.wText);
@@ -96,9 +113,11 @@ public class MainActivity extends Activity {
 		buttonCal.setOnClickListener(
 				new View.OnClickListener() 
 				{		//What to do when button clicked
-			
 					@Override
 					public void onClick(View v) {
+						
+						RelativeLayout rel = (RelativeLayout) findViewById(R.id.RelLayout);
+						
 						double w = 0;
 						double h = 0;
 						try{
@@ -118,7 +137,7 @@ public class MainActivity extends Activity {
 						} catch (NumberFormatException e) {
 
 							dlgAlert.setMessage("You forget something to fill in :s");
-							dlgAlert.setTitle("My First App");
+							dlgAlert.setTitle("How Drunk Am I?");
 							dlgAlert.setPositiveButton("OK", null);
 							dlgAlert.setCancelable(true);
 							dlgAlert.create().show();
@@ -128,10 +147,13 @@ public class MainActivity extends Activity {
 								           refresh();
 								        }
 								    });
+						} finally {
+							rel.setAnimation(fadeOut);
 						}
 						
 					}
 				});
+		
 		add.setOnClickListener(new View.OnClickListener() 
 		{
 			
@@ -189,7 +211,7 @@ public class MainActivity extends Activity {
 			AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
 
 			dlgAlert.setMessage("You must have drunk something?! ö");
-			dlgAlert.setTitle("My First App");
+			dlgAlert.setTitle("How Drunk Am I?");
 			dlgAlert.setPositiveButton("OK", null);
 			dlgAlert.setCancelable(true);
 			dlgAlert.create().show();
@@ -211,11 +233,32 @@ public class MainActivity extends Activity {
 	}
 	
 	/**
-	 * Finish project when back button is pressed.
+	 * Finish project when back button is pressed and you agree to finish.
 	 */
 	@Override
 	public boolean onKeyDown(int keycode,KeyEvent event){
-		if (keycode == KeyEvent.KEYCODE_BACK) finish();
+		if (keycode == KeyEvent.KEYCODE_BACK){
+			AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+
+			dlgAlert.setMessage("Really wanna quit?");
+			dlgAlert.setTitle("How Drunk Am I?");
+			dlgAlert.setPositiveButton("Yes", null);
+			dlgAlert.setNegativeButton("No", null);
+			dlgAlert.setCancelable(false);
+			AlertDialog dialog = dlgAlert.create();
+			dialog.setButton(dialog.BUTTON1, "Yes", new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int which) {
+						finish();
+			        }
+			});
+			dialog.setButton(dialog.BUTTON2, "No", new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int which) {
+			           refresh();
+			        }
+			});
+			
+		    dialog.show();
+		}
 		return super.onKeyDown(keycode, event);
 	}
 	
